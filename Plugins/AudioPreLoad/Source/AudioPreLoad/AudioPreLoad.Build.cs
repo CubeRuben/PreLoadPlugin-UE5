@@ -38,6 +38,7 @@ public class AudioPreLoad : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+                "AudioMixer",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
