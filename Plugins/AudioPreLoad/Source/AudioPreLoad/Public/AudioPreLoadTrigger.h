@@ -19,10 +19,14 @@ protected:
 	class UBoxComponent* TriggerComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<class UAudioList> AudioList;
+	TArray<TObjectPtr<class USoundListBase>> SoundLists;
 
 	virtual void BeginPlay() override;
+	virtual void BeginDestroy() override;
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };

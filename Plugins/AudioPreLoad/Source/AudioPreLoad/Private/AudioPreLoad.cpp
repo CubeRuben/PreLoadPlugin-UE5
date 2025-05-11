@@ -2,6 +2,8 @@
 
 #include "AudioPreLoad.h"
 
+DEFINE_LOG_CATEGORY(LogAudioPreLoad);
+
 #define LOCTEXT_NAMESPACE "FAudioPreLoadModule"
 
 void FAudioPreLoadModule::StartupModule()

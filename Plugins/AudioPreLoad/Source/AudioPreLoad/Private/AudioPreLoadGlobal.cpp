@@ -1,18 +1,34 @@
 #include "AudioPreLoadGlobal.h"
 
-#include "AudioList.h"
+#include "SoundListBase.h"
 
 AAudioPreLoadGlobal::AAudioPreLoadGlobal() :
-	AudioList(nullptr)
+	SoundLists()
 { }
 
 void AAudioPreLoadGlobal::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (AudioList) 
+	for (USoundListBase* const & soundList : SoundLists) 
 	{
-		AudioList->PreLoadSoundList();
+		if (soundList)
+		{
+			soundList->PreLoadSoundList();
+		}
+	}
+}
+
+void AAudioPreLoadGlobal::BeginDestroy()
+{
+	Super::BeginDestroy();
+
+	for (USoundListBase* const& soundList : SoundLists)
+	{
+		if (soundList)
+		{
+			soundList->ReleaseSoundList();
+		}
 	}
 }
 

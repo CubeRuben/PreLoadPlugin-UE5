@@ -1,6 +1,6 @@
 #include "AudioPreLoadTrigger.h"
 
-#include "AudioList.h"
+#include "SoundListBase.h"
 
 #include <Components/BoxComponent.h>
 
@@ -18,6 +18,20 @@ void AAudioPreLoadTrigger::BeginPlay()
 	if (TriggerComponent) 
 	{
 		TriggerComponent->OnComponentBeginOverlap.AddDynamic(this, &AAudioPreLoadTrigger::OnOverlapBegin);
+		TriggerComponent->OnComponentEndOverlap.AddDynamic(this, &AAudioPreLoadTrigger::OnOverlapEnd);
+	}
+}
+
+void AAudioPreLoadTrigger::BeginDestroy()
+{
+	Super::BeginDestroy();
+
+	for (USoundListBase* const& soundList : SoundLists)
+	{
+		if (soundList)
+		{
+			soundList->ReleaseSoundList();
+		}
 	}
 }
 
@@ -39,9 +53,40 @@ void AAudioPreLoadTrigger::OnOverlapBegin(UPrimitiveComponent* OverlappedCompone
 
 	if (pawn == OtherActor)
 	{
-		if (AudioList)
+		for (USoundListBase* const& soundList : SoundLists)
 		{
-			AudioList->PreLoadSoundList();
+			if (soundList)
+			{
+				soundList->PreLoadSoundList();
+			}
+		}
+	}
+}
+
+void AAudioPreLoadTrigger::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	APlayerController* const controller = GetWorld()->GetFirstPlayerController();
+
+	if (!controller)
+	{
+		return;
+	}
+
+	APawn* const pawn = controller->GetPawn();
+
+	if (!pawn)
+	{
+		return;
+	}
+
+	if (pawn == OtherActor)
+	{
+		for (USoundListBase* const& soundList : SoundLists)
+		{
+			if (soundList)
+			{
+				soundList->ReleaseSoundList();
+			}
 		}
 	}
 }

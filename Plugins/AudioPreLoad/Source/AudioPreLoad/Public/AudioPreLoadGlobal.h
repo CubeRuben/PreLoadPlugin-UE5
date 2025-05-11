@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "AudioList.h"
 #include "AudioPreLoadGlobal.generated.h"
 
 UCLASS(BlueprintType)
@@ -17,8 +16,8 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<class UAudioList> AudioList;
+	TArray<TObjectPtr<class USoundListBase>> SoundLists;
 
 	virtual void BeginPlay() override;
-
+	virtual void BeginDestroy() override;
 };
